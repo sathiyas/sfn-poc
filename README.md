@@ -1,13 +1,13 @@
-# sfn-poc
+# Step Functions poc
 Proof of Concept for Step Functions from AWS
 
-**Use-Case**: Use step functions to demonstrate an orchestration workflow
+## Use-Case
 
-**Problem statement**
+Use step functions to demonstrate an orchestration workflow for integration testing
+
+### Problem statement
 
 Conduct an integration test for validating a docker image
-
-Problem Statement
 
 * Create an Autoscaling group of ECS Optimized AMI (ECS/Docker installed by default)
 * Create an ECS Cluster
@@ -15,9 +15,9 @@ Problem Statement
 * Create an ALB/Target group for Load balancing the container
 * Curl http://{alb_address} and check the HTTP return code is 200
 
-**Solution**
+### Solution
 
-Base Artifacts
+#### Base Artifacts
 
 * Create a Cloudformation template to create ASG/ECS Cluster/ALB/FeaultTargetGroup
 * Create a Lambda function that launches the Cloudformation template
@@ -30,7 +30,7 @@ Base Artifacts
 * Create a Lambda function that destroys the CFT
 * Create a Lambda function for status reporting
 
-**Step Functions Design**
+#### Step Functions Design
 
 * In the initial state, create the Cloudformation stack. Make sure the stack reports success only after ECS agent and Docker are up
 * In the next state, check the status of stack and loop using an appropriate approach until stack enters "CREATE_COMPLETE"
