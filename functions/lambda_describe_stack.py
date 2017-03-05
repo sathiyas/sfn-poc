@@ -11,4 +11,5 @@ def lambda_handler(event, context):
 
     StackId = event['StackId']
     print (event)
-    return StackUtils.describe_stacks(StackId)
+    status = StackUtils.describe_stacks(StackId)
+    return status

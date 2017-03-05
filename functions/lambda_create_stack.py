@@ -9,10 +9,15 @@ print('Loading function')
 def lambda_handler(event, context):
     "This is the Lambda handler"
 
+    StackName = event['stack_name']
+    status = StackUtils.describe_stacks(StackName)
+    if(status == 'CREATE_COMPLETE'):
+        print ('Stack already exists')
+        return StackUtils.getStackId(StackName)
+
     KeyName = event['KeyName']
     VpcId = event['VpcId']
     SubnetIDs = event['SubnetIDs']
-    StackName = event['stack_name']
     S3_Url = event['S3_Url']
     tag_name = event['tag_name']
     tag_value = event['tag_value']

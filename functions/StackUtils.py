@@ -47,6 +47,20 @@ def describe_stacks(stack_id):
         return "INVALID_STACK_ID"
 
 #Describe stack
+def getStackId(stackName):
+    "This functions describes a cloudformation stack and returns stackId"
+    client = boto3.client('cloudformation')
+    response = client.describe_stacks(
+        StackName=stackName
+    )
+    print "No of stacks: ", len(response['Stacks'])
+    if len(response['Stacks']) == 1:
+        StackId = response['Stacks'][0]['StackId']
+        return StackId
+    else:
+        return None
+
+#Describe stack
 def get_output(stack_id, outputKey):
     "This functions describes a cloudformation stack and returns status"
     client = boto3.client('cloudformation')
