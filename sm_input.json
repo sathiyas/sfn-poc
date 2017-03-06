@@ -6,5 +6,6 @@
     "S3_Url" : "https://s3.amazonaws.com/vageescof-code-artifacts/ecs-alb.yaml",
     "tag_name" : "Name",
     "tag_value" : "ecs-alb",
-    "expectedVal" : "Congratulations"
+    "expectedVal" : "Congratulations",
+    "outputKey" : "ECSALB"
 }

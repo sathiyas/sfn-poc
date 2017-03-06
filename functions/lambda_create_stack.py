@@ -11,9 +11,12 @@ def lambda_handler(event, context):
 
     StackName = event['stack_name']
     status = StackUtils.describe_stacks(StackName)
+    expectedVal = event['expectedVal']
+    outputKey = event['outputKey']
     if(status == 'CREATE_COMPLETE'):
-        print ('Stack already exists')
-        return StackUtils.getStackId(StackName)
+        print ('The Stack already exists')
+        stackId = StackUtils.getStackId(StackName)
+        return getOutput(stackId, outputKey, expectedVal)
 
     KeyName = event['KeyName']
     VpcId = event['VpcId']
@@ -35,4 +38,12 @@ def lambda_handler(event, context):
     print (parameters)
     print (event)
     stackId = StackUtils.create_stack(stack_name=StackName,S3_Url=S3_Url,parameters=parameters,tag_name=tag_name,tag_value=tag_value)
-    return stackId
+    return getOutput(stackId, outputKey, expectedVal)
+
+def getOutput(StackId, outputKey, expectedVal):
+    "This functions builds a JSON output"
+    output = {}
+    output['StackId'] = StackId
+    output['expectedVal'] = expectedVal
+    output['outputKey'] = outputKey
+    return output

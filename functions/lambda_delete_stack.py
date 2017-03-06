@@ -9,6 +9,15 @@ print('Loading function')
 def lambda_handler(event, context):
     "This is the Lambda handler"
 
-    StackName = event['stack_name']
+    StackId = event['StackId']
     print (event)
-    StackUtils.delete_stack(StackName)
+    StackUtils.delete_stack(StackId)
+    return getOutput(StackId)
+
+def getOutput(StackId):
+    "This functions builds a JSON output"
+    output = {}
+    output['StackId'] = StackId
+    output['expectedVal'] = "N/A"
+    output['outputKey'] = "N/A"
+    return output

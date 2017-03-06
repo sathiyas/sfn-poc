@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion : '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Example of Step Function
+Resources:
+  DescribeStackFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: lambda_describe_stack.lambda_handler
+      Description: Describe the Cloudformation template and return Stack ID
+      Runtime: python2.7
+      CodeUri: s3://vageescof-code-artifacts/functions.zip
+      Role: arn:aws:iam::158369477098:role/lambda-s3-execution-role
+  CreateStackFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: lambda_create_stack.lambda_handler
+      Description: Create the Cloudformation Stack and return Stack ID
+      Runtime: python2.7
+      CodeUri: s3://vageescof-code-artifacts/functions.zip
+      Role: arn:aws:iam::158369477098:role/lambda-s3-execution-role
+  DeleteStackFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: lambda_delete_stack.lambda_handler
+      Description: Deletes the Cloudformation Stack and return Stack ID
+      Runtime: python2.7
+      CodeUri: s3://vageescof-code-artifacts/functions.zip
+      Role: arn:aws:iam::158369477098:role/lambda-s3-execution-role
+  CheckApplicationStatusFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: lambda_check_application_status.lambda_handler
+      Description: Checks application status and returns SUCCESS or FAILURE
+      Runtime: python2.7
+      CodeUri: s3://vageescof-code-artifacts/functions.zip
+      Role: arn:aws:iam::158369477098:role/lambda-s3-execution-role

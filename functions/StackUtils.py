@@ -36,9 +36,13 @@ def delete_stack(stack_name):
 def describe_stacks(stack_id):
     "This functions describes a cloudformation stack and returns status"
     client = boto3.client('cloudformation')
-    response = client.describe_stacks(
-        StackName=stack_id
-    )
+    try:
+        response = client.describe_stacks(
+            StackName=stack_id
+        )
+    except Exception, e:
+        print str(e)
+        return "NONEXISTING_STACK"
     print "No of stacks: ", len(response['Stacks'])
     if len(response['Stacks']) == 1:
         StackStatus = response['Stacks'][0]['StackStatus']

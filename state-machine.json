@@ -12,6 +12,11 @@
       "Resource": "arn:aws:lambda:us-east-1:158369477098:function:deploy-lambda-DescribeStackFunction-4MX1V56IP7N4",
       "Next": "CheckStatus"
     },
+    "Wait45Seconds": {
+      "Type": "Wait",
+      "Seconds": 45,
+      "Next": "StackStatus"
+    },
     "CheckStatus": {
       "Type" : "Choice",
       "Choices": [
@@ -23,17 +28,25 @@
         {
           "Variable": "$.status",
           "StringEquals": "CREATE_IN_PROGRESS",
-          "Next": "StackStatus"
+          "Next": "Wait45Seconds"
         }
       ],
-      "Default": "DefaultState"
+      "Default": "DefaultState1"
     },
     "ApplicationStatus": {
       "Type" : "Task",
       "Resource": "arn:aws:lambda:us-east-1:158369477098:function:deploy-lambda-CheckApplicationStatusFunction-GHAE5CK2GKE7",
       "Next": "CheckAppicationStatus"
     },
-    "DefaultState": {
+    "DefaultState1": {
+      "Type": "Fail",
+      "Cause": "No Matches!"
+    },
+    "DefaultState2": {
+      "Type": "Fail",
+      "Cause": "No Matches!"
+    },
+    "DefaultState3": {
       "Type": "Fail",
       "Cause": "No Matches!"
     },
@@ -47,7 +60,7 @@
         {
           "Variable": "$.status",
           "StringEquals": "SUCCESS",
-          "Next": "NextState"
+          "Next": "DeleteStack"
         },
         {
           "Variable": "$.status",
@@ -55,9 +68,45 @@
           "Next": "FailedState"
         }
       ],
-      "Default": "DefaultState"
+      "Default": "DefaultState2"
     },
-    "NextState": {
+    "DeleteStack": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-east-1:158369477098:function:deploy-lambda-DeleteStackFunction-82DAXJCMAVMW",
+      "Next": "Wait10Seconds"
+    },
+    "Wait10Seconds": {
+      "Type": "Wait",
+      "Seconds": 10,
+      "Next": "StackDeleteStatus"
+    },
+    "StackDeleteStatus": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-east-1:158369477098:function:deploy-lambda-DescribeStackFunction-4MX1V56IP7N4",
+      "Next": "CheckDeleteStatus"
+    },
+    "CheckDeleteStatus": {
+      "Type" : "Choice",
+      "Choices": [
+        {
+          "Variable": "$.status",
+          "StringEquals": "DELETE_COMPLETE",
+          "Next": "FinalState"
+        },
+        {
+          "Variable": "$.status",
+          "StringEquals": "DELETE_IN_PROGRESS",
+          "Next": "Wait30Seconds"
+        }
+      ],
+      "Default": "DefaultState3"
+    },
+    "Wait30Seconds": {
+      "Type": "Wait",
+      "Seconds": 30,
+      "Next": "StackDeleteStatus"
+    },
+    "FinalState": {
       "Type": "Succeed"
     }
   }
