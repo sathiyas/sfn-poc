@@ -1,0 +1,10 @@
+{
+    "KeyName" : "sathiyas",
+    "VpcId" : "vpc-5bb8c53d",
+    "SubnetIDs" : "subnet-15f06f29,subnet-5274661b",
+    "stack_name" : "ecs-alb-stack",
+    "S3_Url" : "https://s3.amazonaws.com/vageescof-code-artifacts/ecs-alb.yaml",
+    "tag_name" : "Name",
+    "tag_value" : "ecs-alb",
+    "expectedVal" : "Congratulations"
+}

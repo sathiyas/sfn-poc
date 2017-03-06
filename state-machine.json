@@ -1,0 +1,64 @@
+{
+  "Comment": "An example of the Amazon States Language using a choice state.",
+  "StartAt": "CreateStack",
+  "States": {
+    "CreateStack": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-east-1:158369477098:function:deploy-lambda-CreateStackFunction-X3I5GSGTUZ04",
+      "Next": "StackStatus"
+    },
+    "StackStatus": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-east-1:158369477098:function:deploy-lambda-DescribeStackFunction-4MX1V56IP7N4",
+      "Next": "CheckStatus"
+    },
+    "CheckStatus": {
+      "Type" : "Choice",
+      "Choices": [
+        {
+          "Variable": "$.status",
+          "StringEquals": "CREATE_COMPLETE",
+          "Next": "ApplicationStatus"
+        },
+        {
+          "Variable": "$.status",
+          "StringEquals": "CREATE_IN_PROGRESS",
+          "Next": "StackStatus"
+        }
+      ],
+      "Default": "DefaultState"
+    },
+    "ApplicationStatus": {
+      "Type" : "Task",
+      "Resource": "arn:aws:lambda:us-east-1:158369477098:function:deploy-lambda-CheckApplicationStatusFunction-GHAE5CK2GKE7",
+      "Next": "CheckAppicationStatus"
+    },
+    "DefaultState": {
+      "Type": "Fail",
+      "Cause": "No Matches!"
+    },
+    "FailedState": {
+      "Type": "Fail",
+      "Cause": "The application failed the test!"
+    },
+    "CheckAppicationStatus": {
+      "Type" : "Choice",
+      "Choices": [
+        {
+          "Variable": "$.status",
+          "StringEquals": "SUCCESS",
+          "Next": "NextState"
+        },
+        {
+          "Variable": "$.status",
+          "StringEquals": "FAILURE",
+          "Next": "FailedState"
+        }
+      ],
+      "Default": "DefaultState"
+    },
+    "NextState": {
+      "Type": "Succeed"
+    }
+  }
+}
