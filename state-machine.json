@@ -91,7 +91,7 @@
         {
           "Variable": "$.status",
           "StringEquals": "DELETE_COMPLETE",
-          "Next": "FinalState"
+          "Next": "Human-Approval"
         },
         {
           "Variable": "$.status",
@@ -106,8 +106,11 @@
       "Seconds": 30,
       "Next": "StackDeleteStatus"
     },
-    "FinalState": {
-      "Type": "Succeed"
+    "Human-Approval": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:us-east-1:158369477098:activity:human-approval",
+      "TimeoutSeconds": 3600,
+      "End" : true
     }
   }
 }
